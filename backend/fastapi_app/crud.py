@@ -4,6 +4,6 @@ from . import models
 
 
 
-def get_all_li(db: Session):
+async def get_all_li(db: Session):
 	
 	return db.query(models.Li).all()

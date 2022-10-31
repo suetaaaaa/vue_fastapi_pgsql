@@ -1,4 +1,6 @@
 from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from sqlalchemy.orm import Session
 
 from . import crud, models
@@ -8,6 +10,18 @@ from .database import SessionLocal, engine
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+origins = [
+	'http://127.0.0.1:5173',
+]
+
+app.add_middleware(
+	CORSMiddleware,
+	allow_origins=origins,
+	allow_credentials=True,
+	allow_methods=['*'],
+	allow_headers=['*'],
+)
 
 # Dependency
 def get_db():
@@ -19,9 +33,8 @@ def get_db():
 
 
 
-
 @app.get('/li')
-def get_li(db: Session = Depends(get_db)):
-	all_li = crud.get_all_li(db)
+async def get_li(db: Session = Depends(get_db)):
+	all_li = await crud.get_all_li(db)
 
 	return all_li

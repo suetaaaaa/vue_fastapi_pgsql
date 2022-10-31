@@ -1,48 +1,60 @@
 <template>
-	<header>
-		<div class="wrapper">
-			<HelloWorld msg="You did it!" />
-		</div>
-	</header>
-
-	<main>
-		<TheWelcome />
-	</main>
+	<div class="app">
+		<green-button
+			@click="fetchLi"
+		>
+			Загрузить ЛИ
+		</green-button>
+		<LiTable/>
+	</div>
 </template>
 
 
 
 <script>
+import LiTable from './components/LiTable.vue';
+import axios from 'axios';
 
+export default {
+	components: {
+		LiTable
+	},
+    data() {
+        return {
+            li: [],
+			isLiLoading: false,
+        };
+    },
+	methods: {
+		async fetchLi() {
+			try {
+				this.isLiLoading = true;
+				const response = await axios.get('http://127.0.0.1:1337/li');
+				this.li = response.data;
+				console.log(response.data);
+			} catch (e) {
+				alert(e);
+			} finally {
+				this.isLiLoading = false;
+			}
+		}
+	},
+	mounted() {
+		this.fetchLi();
+	}
+}
 </script>
 
 
 
 <style>
-header {
-	line-height: 1.5;
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
-.logo {
-	display: block;
-	margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-	header {
-		display: flex;
-		place-items: center;
-		padding-right: calc(var(--section-gap) / 2);
-	}
-
-	.logo {
-		margin: 0 2rem 0 0;
-	}
-
-	header .wrapper {
-		display: flex;
-		place-items: flex-start;
-		flex-wrap: wrap;
-	}
+.app {
+	padding: 20px;
 }
 </style>
