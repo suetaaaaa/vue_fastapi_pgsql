@@ -1,7 +1,7 @@
 <template>
 	<div class="select">
 		<select v-model="modelValue" @change="changeOption">
-			<option disabled value="">choose</option>
+			<option value="" disabled hidden>Сортировать...</option>
 			<option
 				v-for="option in options"
 				:key="option.value"

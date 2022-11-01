@@ -17,6 +17,7 @@
 
 <script>
 export default {
+	name: 'li-table',
 	props: {
 		li: {
 			type: Array,

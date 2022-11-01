@@ -1,13 +1,17 @@
 <template>
 	<div class="app">
-		<DateRange/>
-		<MySelect
+		<date-range
+			:liList="liForDateRange"
+			@filterli="filterLi"
+		/>
+		<my-select
 			v-model="selectedSort"
 			:options="sortOptions"
 		/>
-		<LiTable
+		<li-table
 			:li="sortedLi"
 			:key="li.id"
+			
 		/>
 	</div>
 </template>
@@ -17,20 +21,11 @@
 <script>
 import axios from 'axios';
 
-import LiTable from './components/LiTable.vue';
-import DateRange from './components/UI/DateRange.vue';
-import MySelect from './components/UI/MySelect.vue';
-
-
 export default {
-	components: {
-    LiTable,
-    DateRange,
-    MySelect
-},
     data() {
         return {
             li: [],
+			liForDateRange: [],
 			isLiLoading: false,
 			selectedSort: '',
 			sortOptions: [
@@ -46,11 +41,15 @@ export default {
 				this.isLiLoading = true;
 				const response = await axios.get('http://127.0.0.1:1337/li');
 				this.li = response.data;
+				this.liForDateRange = response.data;
 			} catch (e) {
 				alert(e);
 			} finally {
 				this.isLiLoading = false;
 			}
+		},
+		filterLi(rangeLi) {
+			this.li = rangeLi;
 		}
 	},
 	mounted() {
@@ -61,13 +60,6 @@ export default {
 			return [...this.li].sort((li1, li2) => li1[this.selectedSort]?.localeCompare(li2[this.selectedSort]))
 		}
 	},
-	// watch: {
-	// 	selectedSort(newValue) {
-	// 		this.li.sort((li1, li2) => {
-	// 			return li1[newValue]?.localeCompare(li2[newValue])
-	// 		})
-	// 	}
-	// }
 }
 </script>
 
