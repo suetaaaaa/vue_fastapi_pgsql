@@ -1,23 +1,14 @@
 <template>
-	<table>
+	<table v-if="li.length !== 0">
 		<tr>
-			<th>id</th>
-			<th>ord</th>
-			<th>name</th>
-			<th>code</th>
-			<th>kis_nt_id</th>
-			<th>act</th>
-			<th>dt</th>
+			<th v-for="[key] of Object.entries(li[0])">
+				{{ key }}
+			</th>
 		</tr>
-
-		<tr>
-			<td>id</td>
-			<td>ord</td>
-			<td>name</td>
-			<td>code</td>
-			<td>kis_nt_id</td>
-			<td>act</td>
-			<td>dt</td>
+		<tr v-for="i in li">
+			<td v-for="[key, val] of Object.entries(i)">
+				{{ val }}
+			</td>
 		</tr>
 	</table>
 </template>
@@ -26,7 +17,12 @@
 
 <script>
 export default {
-	
+	props: {
+		li: {
+			type: Array,
+			reqiured: true
+		}
+	}
 }
 </script>
 
@@ -34,6 +30,8 @@ export default {
 
 <style scoped>
 table {
+	margin: auto;
+	width: 80vw;
 	border: 1px solid grey;
 }
 

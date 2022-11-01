@@ -1,28 +1,43 @@
 <template>
 	<div class="app">
-		<green-button
-			@click="fetchLi"
-		>
-			Загрузить ЛИ
-		</green-button>
-		<LiTable/>
+		<DateRange/>
+		<MySelect
+			v-model="selectedSort"
+			:options="sortOptions"
+		/>
+		<LiTable
+			:li="sortedLi"
+			:key="li.id"
+		/>
 	</div>
 </template>
 
 
 
 <script>
-import LiTable from './components/LiTable.vue';
 import axios from 'axios';
+
+import LiTable from './components/LiTable.vue';
+import DateRange from './components/UI/DateRange.vue';
+import MySelect from './components/UI/MySelect.vue';
+
 
 export default {
 	components: {
-		LiTable
-	},
+    LiTable,
+    DateRange,
+    MySelect
+},
     data() {
         return {
             li: [],
 			isLiLoading: false,
+			selectedSort: '',
+			sortOptions: [
+				{value: 'name', name: 'По названию'},
+				{value: 'dt', name: 'По дате'},
+				{value: 'code', name: 'По коду'},
+			]
         };
     },
 	methods: {
@@ -31,7 +46,6 @@ export default {
 				this.isLiLoading = true;
 				const response = await axios.get('http://127.0.0.1:1337/li');
 				this.li = response.data;
-				console.log(response.data);
 			} catch (e) {
 				alert(e);
 			} finally {
@@ -41,7 +55,19 @@ export default {
 	},
 	mounted() {
 		this.fetchLi();
-	}
+	},
+	computed: {
+		sortedLi() {
+			return [...this.li].sort((li1, li2) => li1[this.selectedSort]?.localeCompare(li2[this.selectedSort]))
+		}
+	},
+	// watch: {
+	// 	selectedSort(newValue) {
+	// 		this.li.sort((li1, li2) => {
+	// 			return li1[newValue]?.localeCompare(li2[newValue])
+	// 		})
+	// 	}
+	// }
 }
 </script>
 
