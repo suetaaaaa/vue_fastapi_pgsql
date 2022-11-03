@@ -1,13 +1,21 @@
 <template>
 	<div class="date-range">
-		<input class="date-input" type="date" id="start-date" value="">
-		<input class="date-input" type="date" id="end-date" value="">
-		<green-button
-			class="date-input"
-			@click="getDateRange"
+		<input
+			:value="inputStart"
+			@input="inputStart = $event.target.value"
+			class="date-input" 
+			type="date" 
+			id="start-date" 
+			value=""
 		>
-			Применить фильтр
-		</green-button>
+		<input 
+			:value="inputEnd"
+			@input="inputEnd = $event.target.value"
+			class="date-input" 
+			type="date" 
+			id="end-date"
+			value=""
+		>
 	</div>
 </template>
 
@@ -21,6 +29,8 @@ export default {
 			dateStart: 0,
 			dateEnd: 0,
 			rangeLi: [],
+			inputStart: '',
+			inputEnd: '',
 		}
 	},
 	props: {
@@ -50,7 +60,19 @@ export default {
 		},
 	},
 	mounted() {
-		document.querySelector('#end-date').valueAsDate = new Date();
+		this.inputEnd = new Date().toISOString().slice(0, 10);
+	},
+	watch: {
+		inputStart(newVal) {
+			newVal[0] !== '0' ? 
+				this.getDateRange() :
+				{/*pass*/};
+		},
+		inputEnd(newVal) {
+			newVal[0] !== '0' ? 
+				this.getDateRange() :
+				{/*pass*/};
+		},
 	}
 }
 </script>
