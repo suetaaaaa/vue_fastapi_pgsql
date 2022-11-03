@@ -39,7 +39,7 @@ export default {
 		async fetchLi() {
 			try {
 				this.isLiLoading = true;
-				const response = await axios.get('http://127.0.0.1:1488/li');
+				const response = await axios.get('http://127.0.0.1:1337/li');
 				this.li = response.data;
 				this.liForDateRange = response.data;
 			} catch (e) {
